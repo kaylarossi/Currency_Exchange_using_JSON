@@ -18,6 +18,8 @@ def testA():
     introcs.assert_equals('4.502',result)
     result1=a1.before_space('Kayla Rossi')
     introcs.assert_equals('Kayla',result1)
+    result2=a1.before_space('"ok":false, "lhs":"",')
+    introcs.assert_equals('"ok":false,',result2)
 
     #test printing val after space
     result=a1.after_space('4.502 Euros')
@@ -30,6 +32,8 @@ def testA():
 def testB():
     """
     Test procedure for Part B of testing a JSON
+    Test proc for lhs json
+    Test proc for rhs JSON
     """
     result=a1.first_inside_quotes('A "B C" D')
     introcs.assert_equals('B C',result)
@@ -38,7 +42,28 @@ def testB():
     result2=a1.first_inside_quotes('he"ll"o')
     introcs.assert_equals('ll',result2)
 
+    result_lhs=a1.get_lhs('{ "ok":true, "lhs":"1 Bitcoin", "rhs":"9916.0137 Euros", "err":"" }')
+    introcs.assert_equals('1 Bitcoin',result_lhs)
+    result_lhs1=a1.get_lhs('{ "ok":true, "lhs":"2.5 United States Dollars", "rhs":"64.375 Cuban Pesos", "err":"" }')
+    introcs.assert_equals('2.5 United States Dollars',result_lhs1)
 
+    result_rhs=a1.get_rhs('{ "ok":true, "lhs":"1 Bitcoin", "rhs":"9916.0137 Euros", "err":"" }')
+    introcs.assert_equals('9916.0137 Euros',result_rhs)
+    result_rhs1=a1.get_rhs('{ "ok":true, "lhs":"2.5 United States Dollars", "rhs":"64.375 Cuban Pesos", "err":"" }')
+    introcs.assert_equals('64.375 Cuban Pesos',result_rhs1)
+
+    result_err=a1.has_error('{ "ok":false, "lhs":"", "rhs":"", "err":"Currency amount is invalid." }')
+    introcs.assert_equals(True,result_err)
+    result_err1=a1.has_error('{ "ok":true, "lhs":"1 Bitcoin", "rhs":"9916.0137 Euros", "err":"" }')
+    introcs.assert_equals(False,result_err1)
+
+
+    pass
+
+def testC():
+    """
+    Test proc
+    """
 
 
     pass
