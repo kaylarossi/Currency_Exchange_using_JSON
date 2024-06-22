@@ -119,3 +119,68 @@ def has_error(json):
     capword=cap.capitalize()
     ans=(capword == 'False')
     return ans
+
+def currency_response(src, dst, amt):
+    """
+    Returns a JSON string that is a response to a currency query.
+
+    A currency query converts amt money in currency src to the
+    currency dst. The response should be a string of the form
+
+    '{ "ok":true, "lhs":"<old-amt>", "rhs":"<new-amt>", "err":"" }'
+
+    where the values old-amount and new-amount contain the value
+    and name for the original and new currencies. If the query is
+    invalid, both old-amount and new-amount will be empty, while
+    "ok" will be followed by the value false (and "err" will have
+    an error message).
+
+    Parameter src: the currency on hand (the LHS)
+    Precondition: src is a string with no spaces or non-letters
+
+    Parameter dst: the currency to convert to (the RHS)
+    Precondition: dst is a string with no spaces or non-letters
+
+    Parameter amt: amount of currency to convert
+    Precondition: amt is a float
+    """
+    import introcs
+
+    url = "http://cs1110.cs.cornell.edu/2023fa/a1?src="+src+"&dst="+dst+"&amt="+str(amt)
+
+    return introcs.urlread(url)
+
+def is_currency(code):
+    """
+    Returns: True if code is a valid (3 letter code for a) currency
+    It returns False otherwise.
+
+    Parameter code: the currency code to verify
+    Precondition: code is a string with no spaces or non-letters.
+    """
+    ans = has_error(currency_response('USD',str(code),1.0))
+    ans_val = not ans
+    return ans_val
+
+def exchange(src, dst, amt):
+    """
+    Returns the amount of currency received in the given exchange.
+
+    In this exchange, the user is changing amt money in currency
+    src to the currency dst. The value returned represents the
+    amount in currency dst.
+
+    The value returned has type float.
+
+    Parameter src: the currency on hand (the LHS)
+    Precondition: src is a string for a valid currency code
+
+    Parameter dst: the currency to convert to (the RHS)
+    Precondition: dst is a string for a valid currency code
+
+    Parameter amt: amount of currency to convert
+    Precondition: amt is a float
+    """
+    json_val=currency_response(src,dst,amt)
+    dst_info=get_rhs(json_val)
+    return float(before_space(dst_info))

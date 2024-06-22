@@ -62,16 +62,37 @@ def testB():
 
 def testC():
     """
-    Test proc
+    Test proc to return JSON string
     """
+    result=a1.currency_response('USD','CUP','2.5')
+    introcs.assert_equals('{ "ok":true, "lhs":"2.5 United States Dollars", "rhs":"64.375 Cuban Pesos", "err":"" }',result)
+    result1=a1.currency_response('USD','BIF','1')
+    introcs.assert_equals('{ "ok":true, "lhs":"1 United States Dollar", "rhs":"2047 Burundian Francs", "err":"" }',result1)
+    result2=a1.currency_response('AAA','ZZZ','5')
+    introcs.assert_equals('{ "ok":false, "lhs":"", "rhs":"", "err":"Source currency code is invalid." }',result2)
+
+    pass
+
+def testD():
+    """
+    Test proc for currencies and exchange
+    """
+    result=a1.is_currency('USD')
+    introcs.assert_equals(True,result)
+    result1=a1.is_currency('AAA')
+    introcs.assert_equals(False,result1)
+
+    result_exch=a1.exchange('USD','CUP',2.5)
+    introcs.assert_equals(64.375, result_exch)
+    result_exch1=a1.exchange('USD','AOA',1.0)
+    introcs.assert_floats_equal(428.1788, result_exch1)
+
 
 
     pass
 
-
-
-#testA()
+testA()
 testB()
-#testC()
-#testD()
+testC()
+testD()
 print('Module a1 passed all tests.')
